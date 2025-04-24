@@ -1,0 +1,8 @@
+On windows:
+- Microsoft Visual Studio 2015 (or newer) with C/C++ Compiler installed. (Visual C++ 2015 Build Tools didn't work for me, and I got into problems in compiling dlib)
+- Python3
+- CMake for windows and add it to your system environment variables
+
+pip install dlib face_recognition opencv-python
+pip install git+https://github.com/ageitgey/face_recognition_models
+pip3 install setuptools
