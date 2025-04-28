@@ -103,4 +103,4 @@ Neste projeto, o script principal em Python executa as seguintes tarefas:
 - [OpenCV](https://opencv.org/)
 ```
 
-Se quiser, posso gerar também uma versão `.md` pronta para download. Deseja isso?
+
