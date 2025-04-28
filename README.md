@@ -101,6 +101,6 @@ Neste projeto, o script principal em Python executa as seguintes tarefas:
 
 - [face_recognition](https://github.com/ageitgey/face_recognition) por Adam Geitgey  
 - [OpenCV](https://opencv.org/)
-```
+
 
 
