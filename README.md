@@ -1,9 +1,3 @@
-# Grupo
-- Gabriel Rocha | RM: 550788
-- Luiza Cristina | RM: 99367
-- Pedro Palladino | RM: 551180
-- Renato Izumi | RM: 99242
-
 # Sistema de Chamada com Reconhecimento Facial
 
 Este projeto utiliza visão computacional e reconhecimento facial para rastrear automaticamente a presença dos alunos a partir de uma fonte de vídeo. Ele compara os rostos encontrados em um vídeo (ou transmissão ao vivo) com um conjunto de rostos conhecidos armazenados em uma pasta. O aplicativo exibe cada rosto reconhecido com um contorno e o nome correspondente do aluno. Ao final da sessão, calcula o tempo de presença de cada aluno e os marca como presentes se estiverem visíveis por pelo menos 80% do tempo total da aula.
