@@ -1,100 +1,214 @@
-# Sistema de Chamada com Reconhecimento Facial
+Perfeito, Gabriel. Vou atualizar sua documentação considerando a integração com o projeto do vídeo (ESP32-CAM transmitindo via Wi-Fi), transformando seu sistema em:
 
-Este projeto utiliza visão computacional e reconhecimento facial para rastrear automaticamente a presença dos alunos a partir de uma fonte de vídeo. Ele compara os rostos encontrados em um vídeo (ou transmissão ao vivo) com um conjunto de rostos conhecidos armazenados em uma pasta. O aplicativo exibe cada rosto reconhecido com um contorno e o nome correspondente do aluno. Ao final da sessão, calcula o tempo de presença de cada aluno e os marca como presentes se estiverem visíveis por pelo menos 80% do tempo total da aula.
+📡 ESP32-CAM → Stream RTSP/HTTP → Python (face_recognition) → Controle de presença
 
-## Visão Geral
+Abaixo está a documentação atualizada e pronta para colocar no README do GitHub.
 
-Neste projeto, o script principal em Python executa as seguintes tarefas:
+⸻
 
-- Carrega um arquivo de vídeo pré-gravado (ou você pode modificá-lo para capturar vídeo ao vivo).
-- Carrega e codifica rostos conhecidos a partir de imagens armazenadas na pasta `Faces/`. Os nomes dos arquivos (por exemplo, `550788.jpeg`) são usados para extrair um identificador único (RM) que mapeia para o nome do aluno em um dicionário de dados.
-- Processa o vídeo quadro a quadro:
-  - Inverte e redimensiona o quadro.
-  - Converte o quadro para RGB.
-  - Detecta a localização dos rostos e os codifica.
-  - Compara os rostos detectados com os rostos conhecidos.
-  - Desenha retângulos ao redor dos rostos detectados e exibe o nome correspondente.
-- Mantém um total acumulado do tempo que o vídeo da aula foi reproduzido e contabiliza o tempo em que cada aluno reconhecido aparece.
-- Ao final da sessão, calcula a proporção de presença de cada aluno. Um aluno é marcado como presente se aparecer em pelo menos 80% do tempo total da aula.
-- Por fim, imprime um resumo de presença de cada aluno.
+📹 Sistema de Presença com Reconhecimento Facial + ESP32-CAM
 
-## Funcionalidades
+📌 Descrição do Projeto
 
-- **Detecção e Reconhecimento Facial**: Utiliza a biblioteca `face_recognition` (que encapsula o dlib) para detectar e reconhecer rostos.
-- **Rastreamento de Presença**: Registra o tempo em que cada aluno reconhecido aparece no vídeo.
-- **Anotação em Tempo Real**: Desenha caixas delimitadoras e rótulos nos quadros do vídeo.
-- **Loop de Reprodução do Vídeo**: Reinicia automaticamente o vídeo ao chegar ao final, útil para testes com vídeos pré-gravados.
+Este projeto utiliza visão computacional e reconhecimento facial para rastrear automaticamente a presença dos alunos a partir de uma transmissão ao vivo gerada por uma ESP32-CAM.
 
-## Instalação
+A câmera transmite vídeo via rede Wi-Fi, e o script em Python captura esse stream em tempo real para:
+	•	Detectar rostos
+	•	Reconhecer alunos previamente cadastrados
+	•	Calcular o tempo de permanência na aula
+	•	Determinar presença com base em um limite mínimo (80%)
 
-1. **Clone o repositório:**
+Ao final da sessão, o sistema exibe um relatório de presença com o tempo acumulado de cada aluno.
 
-   ```bash
-   git clone https://github.com/GabrielDiegues/Facial-Recognition.git
-   cd face-recognition-attendance
-   ```
+⸻
 
-2. **Crie um ambiente virtual (recomendado):**
+🏗 Arquitetura do Sistema
 
-   ```bash
-   python -m venv venv
-   ```
-
-3. **Ative o ambiente virtual:**
-
-   - No Windows:
-     ```bash
-     venv\Scripts\activate
-     ```
-   - No macOS/Linux:
-     ```bash
-     source venv/bin/activate
-     ```
-
-4. **Instale os pacotes necessários:**
-
-   ```bash
-   pip install opencv-python face_recognition numpy
-   ```
-
-   *Nota: A biblioteca `face_recognition` pode exigir CMake, dlib e ferramentas de compilação adicionais. Consulte a [página do GitHub do face_recognition](https://github.com/ageitgey/face_recognition) para solucionar problemas de instalação.*
-
-## Como Usar
-
-1. Coloque as imagens de referência dos rostos (nomeadas com o RM do aluno, por exemplo `550788.jpeg`) na pasta `Faces/`.
-
-2. Atualize o dicionário `students_data` no script com os RMs e nomes dos alunos.
-
-3. Execute o script com:
-
-   ```bash
-   python face_cam.py
-   ```
-
-4. O vídeo (por exemplo, `eu.mp4`) será reproduzido, e o sistema processará cada quadro, desenhando retângulos e nomes ao redor dos rostos reconhecidos.
-
-5. Quando você pressionar **'q'**, o vídeo será interrompido. Nesse momento, o console exibirá os dados de cada aluno, incluindo se ele foi marcado como presente e o tempo correspondente de presença.
-
-## Como Funciona
-
-- **Captura de Vídeo**: Utiliza o `VideoCapture` do OpenCV para ler quadros de um arquivo de vídeo (ou de uma câmera ao vivo).
-- **Codificação Facial**: Carrega imagens da pasta `Faces/` e usa `face_recognition.face_encodings()` para gerar uma impressão digital numérica de cada rosto.
-- **Detecção de Rostos**: Para cada quadro do vídeo, o script encontra os rostos usando `face_recognition.face_locations()`.
-- **Comparação de Rostos**: As codificações dos rostos detectados são comparadas com as codificações conhecidas usando `face_recognition.compare_faces()` e `face_recognition.face_distance()`.
-- **Anotação**: O script desenha um retângulo ao redor do rosto e exibe o nome do aluno abaixo se o rosto for reconhecido.
-- **Cálculo da Presença**: O script acumula a contagem de quadros para determinar por quanto tempo cada aluno esteve visível no vídeo, e calcula uma proporção de presença ao final.
-
-## Requisitos
-
-- Python 3.x (testado com Python 3.10; a compatibilidade com Python 3.12 pode exigir ajustes adicionais)
-- OpenCV (`opencv-python`)
-- face_recognition (e sua dependência, dlib)
-- NumPy
-
-## Agradecimentos
-
-- [face_recognition](https://github.com/ageitgey/face_recognition) por Adam Geitgey  
-- [OpenCV](https://opencv.org/)
+ESP32-CAM
+     ↓ (Wi-Fi Stream)
+Rede Local
+     ↓
+Python (OpenCV + face_recognition)
+     ↓
+Processamento em tempo real
+     ↓
+Relatório de presença
 
 
+⸻
 
+🔎 Visão Geral do Funcionamento
+
+O script principal em Python executa as seguintes tarefas:
+	•	Conecta-se ao stream de vídeo da ESP32-CAM.
+	•	Carrega e codifica rostos conhecidos armazenados na pasta Faces/.
+	•	Processa o vídeo em tempo real:
+	•	Redimensiona o frame para otimizar desempenho.
+	•	Converte o frame para RGB.
+	•	Detecta rostos.
+	•	Gera codificações faciais.
+	•	Compara com os rostos conhecidos.
+	•	Desenha retângulos e exibe nomes.
+	•	Mantém um controle acumulado:
+	•	Tempo total da aula.
+	•	Tempo visível de cada aluno.
+	•	Ao final da sessão:
+	•	Calcula a porcentagem de presença.
+	•	Marca como presente alunos visíveis por pelo menos 80% do tempo.
+
+⸻
+
+📡 Integração com ESP32-CAM
+
+1️⃣ Configuração da ESP32-CAM
+
+Utilize o exemplo:
+
+Arquivo → Exemplos → ESP32 → Camera → CameraWebServer
+
+Configure:
+
+const char* ssid = "SEU_WIFI";
+const char* password = "SUA_SENHA";
+
+Selecione a placa:
+
+AI Thinker ESP32-CAM
+
+Após upload, o Serial Monitor mostrará um IP, por exemplo:
+
+http://192.168.0.105
+
+O stream normalmente estará disponível em:
+
+http://192.168.0.105:81/stream
+
+
+⸻
+
+🧠 Código Python para Capturar Stream da ESP32-CAM
+
+Substitua a fonte de vídeo:
+
+import cv2
+
+stream_url = "http://192.168.0.105:81/stream"
+cap = cv2.VideoCapture(stream_url)
+
+Agora o sistema processará o vídeo ao vivo da ESP32-CAM.
+
+⸻
+
+📂 Estrutura do Projeto
+
+face-recognition-attendance/
+│
+├── face_cam.py
+├── Faces/
+│   ├── 550788.jpeg
+│   ├── 123456.jpeg
+│
+├── requirements.txt
+└── README.md
+
+
+⸻
+
+🚀 Funcionalidades
+	•	✅ Reconhecimento facial em tempo real via Wi-Fi
+	•	✅ Integração com ESP32-CAM
+	•	✅ Cálculo automático de presença
+	•	✅ Interface com anotação visual ao vivo
+	•	✅ Processamento otimizado (redução de escala do frame)
+
+⸻
+
+⚙️ Instalação
+
+1️⃣ Clone o repositório
+
+git clone https://github.com/GabrielDiegues/Facial-Recognition.git
+cd face-recognition-attendance
+
+2️⃣ Crie ambiente virtual
+
+python -m venv venv
+
+Ative:
+
+Windows:
+
+venv\Scripts\activate
+
+macOS/Linux:
+
+source venv/bin/activate
+
+3️⃣ Instale dependências
+
+pip install opencv-python face_recognition numpy
+
+⚠️ A biblioteca face_recognition pode exigir CMake e compiladores C++.
+
+⸻
+
+▶️ Como Usar
+	1.	Coloque as imagens de referência na pasta Faces/.
+	2.	Nomeie cada imagem com o RM do aluno.
+	3.	Atualize o dicionário students_data.
+	4.	Atualize a variável stream_url com o IP da ESP32-CAM.
+	5.	Execute:
+
+python face_cam.py
+
+	6.	Pressione q para encerrar a sessão.
+	7.	O relatório de presença será exibido no console.
+
+⸻
+
+🧮 Como o Cálculo de Presença Funciona
+
+O sistema mede:
+
+tempo_visivel_aluno / tempo_total_aula
+
+Se o valor ≥ 0.8 (80%), o aluno é marcado como presente.
+
+⸻
+
+📊 Diferenças da Versão Anterior
+
+Antes	Agora
+Vídeo local (.mp4)	Stream ao vivo da ESP32-CAM
+Uso offline	Monitoramento em tempo real
+Testes simulados	Aplicação real em sala
+
+
+⸻
+
+🧠 Melhorias Futuras
+	•	📦 Exportar relatório em CSV
+	•	🗄 Integração com banco de dados
+	•	🌐 Dashboard web
+	•	🔔 Envio de notificações
+	•	🧠 Reconhecimento com GPU
+	•	🛡 Sistema multi-câmeras
+
+⸻
+
+📌 Requisitos
+	•	Python 3.10+ (recomendado 3.10 ou 3.11)
+	•	OpenCV
+	•	face_recognition
+	•	NumPy
+	•	ESP32-CAM
+	•	Rede Wi-Fi local
+
+⸻
+
+Agradecimentos
+	•	face_recognition – Adam Geitgey
+	•	OpenCV
+	•	Projeto ESP32-CAM (AI Thinker)
+
+⸻
