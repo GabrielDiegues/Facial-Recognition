@@ -1,5 +1,8 @@
 📹 Sistema de Presença com Reconhecimento Facial + ESP32-CAM
-
+Grupo:
+- Gabriel Diegues Figueiredo Rocha | RM: 550788
+- Luiza Cristina | RM: 99367
+- Pedro Palladino | RM: 551180
 📌 Descrição do Projeto
 
 Este projeto utiliza visão computacional e reconhecimento facial para rastrear automaticamente a presença dos alunos a partir de uma transmissão ao vivo gerada por uma ESP32-CAM.
