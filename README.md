@@ -270,7 +270,7 @@ Agradecimentos
 
 	•	OpenCV
 
-	•	Projeto ESP32-CAM (AI Thinker)
+	•	Projeto ESP32-CAM (AI Thinker) - https://youtu.be/Ul0h5Maeoeg?si=kPELXUlxfYFRCmI6
 
 ⸻
  
